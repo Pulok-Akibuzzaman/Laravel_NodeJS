@@ -1,4 +1,4 @@
-FROM php:8.3-cli
+FROM php:8.4-cli
 
 # Install system dependencies & SQLite drivers
 RUN apt-get update && apt-get install -y \
@@ -18,10 +18,10 @@ WORKDIR /app/laravel-app
 # Copy application files
 COPY laravel-app/ /app/laravel-app
 
-# Install PHP dependencies ignoring strict platform requirements
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-reqs
+# Install PHP dependencies
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Ensure SQLite database exists & run migrations
+# Ensure SQLite database exists & run key generate
 RUN touch database/database.sqlite
 RUN php artisan key:generate || true
 
