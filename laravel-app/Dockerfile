@@ -13,10 +13,10 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /app/laravel-app
+WORKDIR /app
 
 # Copy application files
-COPY laravel-app/ /app/laravel-app
+COPY . /app
 
 # Install PHP dependencies ignoring strict platform requirements
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-reqs
