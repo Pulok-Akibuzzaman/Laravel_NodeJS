@@ -101,7 +101,7 @@ class TaskController extends Controller
                 $nodeUrl = 'https://laravel-nodejs.onrender.com/webhook';
             }
 
-            $response = Http::timeout(5)->post($nodeUrl, [
+            $response = Http::withoutVerifying()->timeout(10)->post($nodeUrl, [
                 'event' => $event,
                 'data'  => $data,
                 'timestamp' => now()->toIso8601String()

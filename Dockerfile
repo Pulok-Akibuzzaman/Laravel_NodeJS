@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     curl \
+    ca-certificates \
     && docker-php-ext-install pdo_sqlite
 
 # Install Composer
