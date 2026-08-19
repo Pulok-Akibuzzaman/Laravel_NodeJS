@@ -92,13 +92,14 @@ class TaskController extends Controller
     protected function notifyNodeServer(string $event, $data): void
     {
         try {
-            $nodeUrl = env('NODE_SERVER_URL', 'https://laravel-nodejs.onrender.com/webhook');
-            
-            // Auto-fallback: If request comes from a live production domain (not localhost/127.0.0.1)
-            // but nodeUrl points to local 127.0.0.1/localhost, automatically route to production Node server.
-            $host = request()->getHost();
-            if ($host !== 'localhost' && $host !== '127.0.0.1' && (str_contains($nodeUrl, '127.0.0.1') || str_contains($nodeUrl, 'localhost') || empty($nodeUrl))) {
+            $nodeUrl = env('NODE_SERVER_URL');
+            $forwardedHost = request()->header('x-forwarded-host') ?? request()->getHost();
+
+            // If request comes through Render (X-Forwarded-Host contains onrender.com or non-local host)
+            if (str_contains($forwardedHost, 'onrender.com') || (!str_contains($forwardedHost, 'localhost') && !str_contains($forwardedHost, '127.0.0.1'))) {
                 $nodeUrl = 'https://laravel-nodejs.onrender.com/webhook';
+            } elseif (empty($nodeUrl)) {
+                $nodeUrl = 'http://127.0.0.1:3000/webhook';
             }
 
             $response = Http::withoutVerifying()->timeout(10)->post($nodeUrl, [
