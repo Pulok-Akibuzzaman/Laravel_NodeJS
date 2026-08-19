@@ -545,7 +545,7 @@
     <script>
         const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         const LARAVEL_API_URL = isLocal ? 'http://localhost:8000/api/tasks' : (window.location.origin + '/api/tasks');
-        const SOCKET_SERVER_URL = isLocal ? 'http://localhost:3000' : 'https://laravel-nodejs.onrender.com';
+        const SOCKET_SERVER_URL = isLocal ? 'http://localhost:3000' : '{{ env("NODE_SOCKET_URL", "https://laravel-nodejs.onrender.com") }}';
 
 
         let socket = null;

@@ -93,11 +93,15 @@ class TaskController extends Controller
     {
         try {
             $nodeUrl = env('NODE_SERVER_URL', 'http://127.0.0.1:3000/webhook');
-            Http::timeout(2)->post($nodeUrl, [
+            $response = Http::timeout(5)->post($nodeUrl, [
                 'event' => $event,
                 'data'  => $data,
                 'timestamp' => now()->toIso8601String()
             ]);
+
+            if ($response->failed()) {
+                Log::warning("Node.js Webhook returned non-200 status ({$response->status()}): " . $response->body());
+            }
         } catch (\Throwable $e) {
             Log::warning("Node.js Webhook notification failed: " . $e->getMessage());
         }
