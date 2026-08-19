@@ -92,7 +92,13 @@ class TaskController extends Controller
     protected function notifyNodeServer(string $event, $data): void
     {
         try {
-            $nodeUrl = env('NODE_SERVER_URL', 'http://127.0.0.1:3000/webhook');
+            $nodeUrl = env('NODE_SERVER_URL');
+            if (empty($nodeUrl)) {
+                $nodeUrl = app()->isLocal() 
+                    ? 'http://127.0.0.1:3000/webhook' 
+                    : 'https://laravel-nodejs.onrender.com/webhook';
+            }
+
             $response = Http::timeout(5)->post($nodeUrl, [
                 'event' => $event,
                 'data'  => $data,
