@@ -165,19 +165,3 @@ Laravel_NodeJS/
     └── index.html               # Backup single-file web app
 ```
 
----
-
-## 🎓 Presentation & Viva Cheat Sheet
-
-**Q1: Why combine Laravel and Node.js?**
-> *Answer:* Laravel provides structure, ORM database management, and API route validation. Node.js is asynchronous and non-blocking, making it ideal for persistent WebSockets connections. Combining them gives us the best of both worlds.
-
-**Q2: How do Laravel and Node.js communicate?**
-> *Answer:* Laravel sends an HTTP POST Webhook request to Node.js (`/webhook`) whenever a task is created, updated, or deleted.
-
-**Q3: How does the browser update without refreshing?**
-> *Answer:* The browser maintains an open Socket.io WebSocket connection to Node.js. When Node.js receives a webhook from Laravel, it broadcasts an event to the browser, updating the screen live.
-
----
-
-🎉 **You are all set! Everything is documented in this single README.md.**
