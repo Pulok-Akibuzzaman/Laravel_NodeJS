@@ -92,11 +92,13 @@ class TaskController extends Controller
     protected function notifyNodeServer(string $event, $data): void
     {
         try {
-            $nodeUrl = env('NODE_SERVER_URL');
-            if (empty($nodeUrl)) {
-                $nodeUrl = app()->isLocal() 
-                    ? 'http://127.0.0.1:3000/webhook' 
-                    : 'https://laravel-nodejs.onrender.com/webhook';
+            $nodeUrl = env('NODE_SERVER_URL', 'https://laravel-nodejs.onrender.com/webhook');
+            
+            // Auto-fallback: If request comes from a live production domain (not localhost/127.0.0.1)
+            // but nodeUrl points to local 127.0.0.1/localhost, automatically route to production Node server.
+            $host = request()->getHost();
+            if ($host !== 'localhost' && $host !== '127.0.0.1' && (str_contains($nodeUrl, '127.0.0.1') || str_contains($nodeUrl, 'localhost') || empty($nodeUrl))) {
+                $nodeUrl = 'https://laravel-nodejs.onrender.com/webhook';
             }
 
             $response = Http::timeout(5)->post($nodeUrl, [
@@ -109,7 +111,7 @@ class TaskController extends Controller
                 Log::warning("Node.js Webhook returned non-200 status ({$response->status()}): " . $response->body());
             }
         } catch (\Throwable $e) {
-            Log::warning("Node.js Webhook notification failed: " . $e->getMessage());
+            Log::warning("Node.js Webhook notification failed to {$nodeUrl}: " . $e->getMessage());
         }
     }
 }
