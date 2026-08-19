@@ -5,6 +5,14 @@ Welcome! This is the complete, all-in-one guide for the **Simple Real-Time Task 
 
 ---
 
+## 🌐 Live Deployed Application
+
+- 💻 **Web Application UI & API**: [https://task-laravel-api.onrender.com/](https://task-laravel-api.onrender.com/)
+- 📢 **Node.js WebSockets Server**: [https://laravel-nodejs.onrender.com/](https://laravel-nodejs.onrender.com/)
+
+
+---
+
 ## 🧠 How It Works (In Easy Words)
 
 Think of the system like a restaurant team:
