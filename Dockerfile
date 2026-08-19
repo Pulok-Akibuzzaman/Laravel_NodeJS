@@ -21,10 +21,11 @@ COPY laravel-app/ /app/laravel-app
 # Install PHP dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Ensure SQLite database exists & run key generate
+# Ensure SQLite database exists & generate application key
 RUN touch database/database.sqlite
 RUN php artisan key:generate || true
 
 EXPOSE 8000
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# Execute migration on container startup and serve application
+CMD ["sh", "-c", "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"]
